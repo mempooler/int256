@@ -444,3 +444,14 @@ func AddDelta(z, x *uint256.Int, y *Int) {
 		z.Add(x, y.abs)
 	}
 }
+
+// Sets z to the sum x + y, where z and x are uint256s and y is an int256.
+func AddDeltaOverflow(z, x *uint256.Int, y *Int) bool {
+	var overflow bool
+	if y.neg {
+		_, overflow = z.SubOverflow(x, y.abs)
+	} else {
+		_, overflow = z.AddOverflow(x, y.abs)
+	}
+	return overflow
+}
