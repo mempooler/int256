@@ -378,6 +378,11 @@ func (z *Int) AddUint256(x *Int, y *uint256.Int) *Int {
 	return z
 }
 
+// Clone creates a new Int identical to z
+func (z *Int) Clone() *Int {
+	return &Int{z.abs.Clone(), z.neg}
+}
+
 // DivUint256 sets z to the quotient x/y, where y is a uint256, and returns z
 // If y == 0, z is set to 0
 func (z *Int) DivUint256(x *Int, y *uint256.Int) *Int {
