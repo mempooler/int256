@@ -351,9 +351,31 @@ func FromUint256(x *uint256.Int) *Int {
 	return z
 }
 
+// AbsGt returns true if |z| > x, where x is a uint256
+func (z *Int) AbsGt(x *uint256.Int) bool {
+	return z.abs.Gt(x)
+}
+
 // AbsLt returns true if |z| < x, where x is a uint256
 func (z *Int) AbsLt(x *uint256.Int) bool {
 	return z.abs.Lt(x)
+}
+
+// AddUint256 set z to the sum x + y, where y is a uint256, and returns z
+func (z *Int) AddUint256(x *Int, y *uint256.Int) *Int {
+	if x.neg {
+		if x.abs.Gt(y) {
+			z.abs.Sub(x.abs, y)
+			z.neg = true
+		} else {
+			z.abs.Sub(y, x.abs)
+			z.neg = false
+		}
+	} else {
+		z.abs.Add(x.abs, y)
+		z.neg = false
+	}
+	return z
 }
 
 // DivUint256 sets z to the quotient x/y, where y is a uint256, and returns z
