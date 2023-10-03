@@ -337,3 +337,88 @@ func (z *Int) And(x, y *Int) *Int {
 	z = MustFromBig(big)
 	return z
 }
+
+// FromUint256 is a convenience-constructor from uint256.Int.
+// Returns a new Int and whether overflow occurred.
+// OBS: If u is `nil`, this method returns `nil, false`
+func FromUint256(x *uint256.Int) *Int {
+	if x == nil {
+		return nil
+	}
+	z := New()
+	// z := &Int{}
+	z.SetUint256(x)
+	return z
+}
+
+// AbsLt returns true if |z| < x, where x is a uint256
+func (z *Int) AbsLt(x *uint256.Int) bool {
+	return z.abs.Lt(x)
+}
+
+// DivUint256 sets z to the quotient x/y, where y is a uint256, and returns z
+// If y == 0, z is set to 0
+func (z *Int) DivUint256(x *Int, y *uint256.Int) *Int {
+	z.abs.Div(x.abs, y)
+	if z.abs.IsZero() {
+		z.neg = false
+	} else {
+		z.neg = x.neg
+	}
+	return z
+}
+
+// MulUint256 sets z to the product x*y, where y is a uint256, and returns z
+func (z *Int) MulUint256(x *Int, y *uint256.Int) *Int {
+	z.abs.Mul(x.abs, y)
+	if z.abs.IsZero() {
+		z.neg = false
+	} else {
+		z.neg = x.neg
+	}
+	return z
+}
+
+// Neg sets z to -x and returns z.
+func (z *Int) Neg(x *Int) *Int {
+	z.abs.Set(x.abs)
+	if z.abs.IsZero() {
+		z.neg = false
+	} else {
+		z.neg = !x.neg
+	}
+	return z
+}
+
+// SetFromUint256 converts a uint256.Int to Int and sets the value to z.
+func (z *Int) SetUint256(x *uint256.Int) *Int {
+	z.abs.Set(x)
+	z.neg = false
+	return z
+}
+
+// SubUint256 set z to the difference x - y, where y is a uint256, and returns z
+func (z *Int) SubUint256(x *Int, y *uint256.Int) *Int {
+	if x.neg {
+		z.abs.Add(x.abs, y)
+		z.neg = true
+	} else {
+		if x.abs.Lt(y) {
+			z.abs.Sub(y, x.abs)
+			z.neg = true
+		} else {
+			z.abs.Sub(x.abs, y)
+			z.neg = false
+		}
+	}
+	return z
+}
+
+// Sets z to the sum x + y, where z and x are uint256s and y is an int256.
+func AddDelta(z, x *uint256.Int, y *Int) {
+	if y.neg {
+		z.Sub(x, y.abs)
+	} else {
+		z.Add(x, y.abs)
+	}
+}
