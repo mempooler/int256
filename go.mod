@@ -1,4 +1,4 @@
-module github.com/linhbkhn95/int256
+module github.com/mempooler/int256
 
 go 1.19
 
