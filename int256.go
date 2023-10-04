@@ -180,7 +180,15 @@ func (z *Int) Rsh(x *Int, n uint) *Int {
 	}
 	// TODO: implement
 	b := x.ToBig()
-	return MustFromBig(b.Rsh(b, n))
+	b.Rsh(b, n)
+	if b.Cmp(zero) == -1 {
+		b.Neg(b)
+		z.neg = true
+	} else {
+		z.neg = false
+	}
+	z.abs.SetFromBig(b)
+	return z
 }
 
 // Quo sets z to the quotient x/y for y != 0 and returns z.
