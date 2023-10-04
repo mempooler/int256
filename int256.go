@@ -422,6 +422,14 @@ func (z *Int) Lt(x *Int) bool {
 	}
 }
 
+// Mod sets z to the modulus x%y for y != 0 and returns z.
+// If y == 0, z is set to 0 (OBS: differs from the big.Int)
+func (z *Int) Mod(x, y *Int) *Int {
+	z.abs.Mod(x.abs, y.abs)
+	z.neg = false
+	return z
+}
+
 // MulUint256 sets z to the product x*y, where y is a uint256, and returns z
 func (z *Int) MulUint256(x *Int, y *uint256.Int) *Int {
 	z.abs.Mul(x.abs, y)
