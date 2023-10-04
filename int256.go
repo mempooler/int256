@@ -452,6 +452,11 @@ func (z *Int) Gt(x *Int) bool {
 	}
 }
 
+// MarshalJSON implements json.Marshaler.
+func (z *Int) MarshalJSON() ([]byte, error) {
+	return z.ToBig().MarshalJSON()
+}
+
 // Mod sets z to the modulus x%y for y != 0 and returns z.
 // If y == 0, z is set to 0 (OBS: differs from the big.Int)
 func (z *Int) Mod(x, y *Int) *Int {
@@ -524,6 +529,22 @@ func (z *Int) SubUint256(x *Int, y *uint256.Int) *Int {
 // Uint64 returns the lower 64-bits of z
 func (z *Int) Uint64() uint64 {
 	return z.abs.Uint64()
+}
+
+// UnmarshalJSON implements json.Unmarshaler.
+func (z *Int) UnmarshalJSON(input []byte) error {
+	b := new(big.Int)
+	if err := b.UnmarshalJSON(input); err != nil {
+		return err
+	}
+	if b.Cmp(zero) < 0 {
+		b.Neg(b)
+		z.neg = true
+	} else {
+		z.neg = false
+	}
+	z.abs.SetFromBig(b)
+	return nil
 }
 
 // Sets z to the sum x + y, where z and x are uint256s and y is an int256.
