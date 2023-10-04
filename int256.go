@@ -427,6 +427,23 @@ func (z *Int) Lt(x *Int) bool {
 	}
 }
 
+// Gt returns true if z > x
+func (z *Int) Gt(x *Int) bool {
+	if z.neg {
+		if x.neg {
+			return z.abs.Lt(x.abs)
+		} else {
+			return false
+		}
+	} else {
+		if x.neg {
+			return true
+		} else {
+			return z.abs.Gt(x.abs)
+		}
+	}
+}
+
 // Mod sets z to the modulus x%y for y != 0 and returns z.
 // If y == 0, z is set to 0 (OBS: differs from the big.Int)
 func (z *Int) Mod(x, y *Int) *Int {
