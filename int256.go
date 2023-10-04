@@ -543,7 +543,7 @@ func (z *Int) UnmarshalJSON(input []byte) error {
 	} else {
 		z.neg = false
 	}
-	z.abs.SetFromBig(b)
+	z.abs = new(uint256.Int).SetFromBig(b)
 	return nil
 }
 
