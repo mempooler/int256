@@ -405,6 +405,11 @@ func (z *Int) Eq(x *Int) bool {
 	return (z.neg == x.neg) && z.abs.Eq(x.abs)
 }
 
+// IsZero returns true if z == 0
+func (z *Int) IsZero() bool {
+	return z.abs.IsZero()
+}
+
 // Lt returns true if z < x
 func (z *Int) Lt(x *Int) bool {
 	if z.neg {
