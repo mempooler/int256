@@ -351,6 +351,11 @@ func FromUint256(x *uint256.Int) *Int {
 	return z
 }
 
+// Abs returns |z|
+func (z *Int) Abs() *uint256.Int {
+	return z.abs.Clone()
+}
+
 // AbsGt returns true if |z| > x, where x is a uint256
 func (z *Int) AbsGt(x *uint256.Int) bool {
 	return z.abs.Gt(x)
