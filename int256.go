@@ -430,7 +430,15 @@ func (z *Int) Lt(x *Int) bool {
 // Mod sets z to the modulus x%y for y != 0 and returns z.
 // If y == 0, z is set to 0 (OBS: differs from the big.Int)
 func (z *Int) Mod(x, y *Int) *Int {
-	z.abs.Mod(x.abs, y.abs)
+	if x.neg {
+		z.abs.Div(x.abs, y.abs)
+		z.abs.Add(z.abs, one)
+		z.abs.Mul(z.abs, y.abs)
+		z.abs.Sub(z.abs, x.abs)
+		z.abs.Mod(z.abs, y.abs)
+	} else {
+		z.abs.Mod(x.abs, y.abs)
+	}
 	z.neg = false
 	return z
 }
