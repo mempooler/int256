@@ -475,6 +475,11 @@ func (z *Int) SubUint256(x *Int, y *uint256.Int) *Int {
 	return z
 }
 
+// Uint64 returns the lower 64-bits of z
+func (z *Int) Uint64() uint64 {
+	return z.abs.Uint64()
+}
+
 // Sets z to the sum x + y, where z and x are uint256s and y is an int256.
 func AddDelta(z, x *uint256.Int, y *Int) {
 	if y.neg {
