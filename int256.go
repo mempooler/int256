@@ -400,6 +400,11 @@ func (z *Int) DivUint256(x *Int, y *uint256.Int) *Int {
 	return z
 }
 
+// Eq returns true if z == x
+func (z *Int) Eq(x *Int) bool {
+	return (z.neg == x.neg) && z.abs.Eq(x.abs)
+}
+
 // Lt returns true if z < x
 func (z *Int) Lt(x *Int) bool {
 	if z.neg {
