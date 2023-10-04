@@ -395,6 +395,23 @@ func (z *Int) DivUint256(x *Int, y *uint256.Int) *Int {
 	return z
 }
 
+// Lt returns true if z < x
+func (z *Int) Lt(x *Int) bool {
+	if z.neg {
+		if x.neg {
+			return z.abs.Gt(x.abs)
+		} else {
+			return true
+		}
+	} else {
+		if x.neg {
+			return false
+		} else {
+			return z.abs.Lt(x.abs)
+		}
+	}
+}
+
 // MulUint256 sets z to the product x*y, where y is a uint256, and returns z
 func (z *Int) MulUint256(x *Int, y *uint256.Int) *Int {
 	z.abs.Mul(x.abs, y)
