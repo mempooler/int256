@@ -434,6 +434,13 @@ func (z *Int) Neg(x *Int) *Int {
 	return z
 }
 
+// Set sets z to x and returns z.
+func (z *Int) Set(x *Int) *Int {
+	z.abs.Set(x.abs)
+	z.neg = x.neg
+	return z
+}
+
 // SetFromUint256 converts a uint256.Int to Int and sets the value to z.
 func (z *Int) SetUint256(x *uint256.Int) *Int {
 	z.abs.Set(x)
